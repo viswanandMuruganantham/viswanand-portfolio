@@ -1,9 +1,13 @@
-import { motion } from "framer-motion";
+
 import profilePic from "@/assets/profile.jpg";
 import { FaReact, FaNodeJs, FaEthereum } from "react-icons/fa";
 import { SiNestjs, SiPostgresql, SiTailwindcss } from "react-icons/si";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 export default function Home() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
   return (
     <div className="w-full bg-gray-900 text-white flex flex-col items-center relative px-4">
       {/* Profile Picture - Positioned Left Below Navbar (Responsive) */}
@@ -76,22 +80,31 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Fun Fact Section */}
-      <section className="px-4 py-12 bg-gray-800 text-center w-full">
-        <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 tracking-wide">✨ Fun Fact ✨</h2>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="max-w-lg mx-auto text-sm md:text-lg font-semibold 
-                     bg-gradient-to-r from-yellow-400 via-pink-500 to-red-500 
-                     bg-clip-text text-transparent italic"
-        >
-          "The first website I built had more console errors than lines of code! <br />
-          Now, I architect full-stack applications and deploy decentralized solutions. <br />
-          🚀 Progress is just **consistency** over time!"
-        </motion.p>
-      </section>
+      <section ref={ref} className="px-4 py-12 bg-gray-800 text-center w-full">
+      {/* Heading Animation on Scroll */}
+      <motion.h2
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={isInView ? { opacity: 1, scale: 1 } : {}}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="text-2xl md:text-3xl font-bold text-white mb-4 tracking-wide"
+      >
+        ✨ Fun Fact ✨
+      </motion.h2>
+
+      {/* Paragraph Animation on Scroll */}
+      <motion.p
+        initial={{ opacity: 0, y: 40 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
+        className="max-w-lg mx-auto text-sm md:text-lg font-semibold 
+                   bg-gradient-to-r from-yellow-400 via-pink-500 to-red-500 
+                   bg-clip-text text-transparent italic"
+      >
+        "The first website I built had more console errors than lines of code! <br />
+        Now, I architect full-stack applications and deploy decentralized solutions. <br />
+        🚀 Progress is just **consistency** over time!"
+      </motion.p>
+    </section>
     </div>
   );
 }
