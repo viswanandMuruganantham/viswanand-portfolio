@@ -16,7 +16,7 @@ export default function App() {
 
         {/* Resume Button - Positioned Responsively */}
         <div className="absolute top-4 right-4 md:top-10 md:right-6">
-          <a href="/assets/MYRESUME.pdf" download>
+          <a href="myportfolio\public\MYRESUME.pdf" download>
             <Button className="shadow-lg shadow-blue-500/50" asChild>
               <span>Download Resume</span>
             </Button>
