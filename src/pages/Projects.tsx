@@ -7,25 +7,25 @@ const projects = [
     title: "E-Commerce Website",
     description:
       "Developed a feature-rich e-commerce website with user authentication, product management, and order processing using HTML, CSS, JavaScript, and PHP.",
-    link: "#",
+    link: "https://github.com/viswanandMuruganantham/E-commerce",
   },
   {
     title: "Smart Agriculture System Using IoT",
     description:
       "Designed and developed an IoT-based smart agriculture system for monitoring environmental conditions using React, Arduino, and ThingSpeak.",
-    link: "#",
+    link: "https://github.com/viswanandMuruganantham/React-IOT",
   },
   {
     title: "WeatherMate - Real-Time Weather App",
     description:
       "Built a real-time weather application using React and Tailwind CSS to display live weather updates based on user location.",
-    link: "#",
+    link: "https://github.com/viswanandMuruganantham/react-weather",
   },
   {
-    title: "Docker & Blockchain Integration",
+    title: " Blockchain Based Application",
     description:
-      "Successfully set up Docker containers for application development using a blockchain network as part of a TCS iON internship.",
-    link: "#",
+      "Successfully built a Transtaction Handler application development using a blockchain network as part of a TCS iON internship.",
+    link: "https://github.com/viswanandMuruganantham/blockchain",
   },
   {
     title: "AR and VR Experience (Meta Spark Studio)",
@@ -37,13 +37,13 @@ const projects = [
     title: "React & Tailwind Blog Application",
     description:
       "Developed a responsive blog application using React and Tailwind CSS, focusing on a clean UI and smooth user experience.",
-    link: "#",
+    link: "https://github.com/viswanandMuruganantham/react-tailwind?tab=readme-ov-file",
   },
   {
     title: "E-Commerce Product Page with React & React Router",
     description:
       "Developed an interactive e-commerce product page using React and React Router, enhancing navigation and user experience.",
-    link: "#",
+    link: "https://github.com/viswanandMuruganantham/react-ecommerce-routing",
   },
 ];
 
