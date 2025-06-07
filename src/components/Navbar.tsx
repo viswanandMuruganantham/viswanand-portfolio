@@ -1,68 +1,130 @@
-import { useState } from "react";
+import  { useState, useEffect } from "react";
+import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react"; // Mobile menu icons
-import { motion, AnimatePresence } from "framer-motion"; // Motion animations
+import {
+  AiFillStar,
+  AiOutlineHome,
+  AiOutlineUser,
+  AiOutlineFundProjectionScreen,
+} from "react-icons/ai";
+import { ImBlog } from "react-icons/im";
+import { FaBlog } from "react-icons/fa";
+import { CgGitFork, CgFileDocument } from "react-icons/cg";
+import { motion, AnimatePresence } from "framer-motion";
+import "../style.css";
+import profileImg from "../assets/profile.jpg";
 
-export default function Navbar() {
-  const [isNavOpen, setIsNavOpen] = useState(false);
 
-  // Motion Variants for Mobile Menu Animation
-  const menuVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -20 },
-  };
+export default function MyNav() {
+  const [expand, updateExpanded] = useState(false);
+  const [navColour, updateNavbar] = useState(false);
+
+  useEffect(() => {
+    const scrollHandler = () => {
+      updateNavbar(window.scrollY >= 20);
+    };
+    window.addEventListener("scroll", scrollHandler);
+    return () => window.removeEventListener("scroll", scrollHandler);
+  }, []);
+
+  const navItems = [
+    {
+      path: "/",
+      label: "Home",
+      icon: <AiOutlineHome style={{ marginBottom: "2px" }} />,
+    },
+    {
+      path: "/about",
+      label: "about",
+      icon: <AiOutlineUser style={{ marginBottom: "2px" }} />,
+    },
+    {
+      path: "/Projects",
+      label: "Projects",
+      icon: <AiOutlineFundProjectionScreen style={{ marginBottom: "2px" }} />,
+    },
+    {
+      path: "/resume",
+      label: "Resume",
+      icon: <CgFileDocument style={{ marginBottom: "2px" }} />,
+    },
+    {
+      path: "/certificate",
+      label: "Certifications",
+      icon: <ImBlog style={{ marginBottom: "2px" }} />,
+    },
+    {
+      path: "/contact",
+      label: "Contact me",
+      icon: <FaBlog style={{ marginBottom: "2px" }} />,
+    },
+  ];
 
   return (
-    <header className="fixed top-0 left-0 w-full text-white z-50">
-      <div className="flex justify-between items-center px-6 py-4">
-        {/* Left-Aligned Desktop Navigation */}
-        <nav className="hidden md:flex">
-          <ul className="flex items-center space-x-6">
-            {["Home", "About", "Projects", "Contact"].map((item, index) => (
-              <li key={index}>
-                <Button variant="ghost">
-                  <Link to={`/${item.toLowerCase()}`}>{item}</Link>
-                </Button>
-              </li>
-            ))}
-          </ul>
-        </nav>
+    <Navbar
+      expanded={expand}
+      fixed="top"
+      expand="md"
+      className={navColour ? "sticky" : "navbar"}
+    >
+      <Container>
+        <Navbar.Brand as={Link} to="/">
+          <div className="d-flex flex-row justify-content-between align-items-center">
+            <img src={profileImg} className="img-fluid logo" alt="brand" />
+            <h5
+              id="navhead"
+              style={{ marginLeft: "21px", paddingTop: "6px", color: "#fbd9ad" }}
+            >
+              VISWANAND M
+            </h5>
+          </div>
+        </Navbar.Brand>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden z-50 relative"
-          onClick={() => setIsNavOpen(!isNavOpen)}
+        <Navbar.Toggle
+          aria-controls="responsive-navbar-nav"
+          onClick={() => updateExpanded(expand ? false : true)}
         >
-          {isNavOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
-      </div>
+          <span></span>
+          <span></span>
+          <span></span>
+        </Navbar.Toggle>
 
-      {/* Animated Mobile Navigation Menu */}
-      <AnimatePresence>
-        {isNavOpen && (
+        <AnimatePresence>
           <motion.div
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            variants={menuVariants}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="absolute top-16 left-0 w-full text-white shadow-lg flex flex-col items-start py-6 md:hidden px-6"
+            className="w-100"
           >
-            {["Home", "About", "Projects", "Contact"].map((item, index) => (
-              <Button
-                key={index}
-                variant="ghost"
-                className="text-white w-full text-left"
-                onClick={() => setIsNavOpen(false)}
-              >
-                <Link to={`/${item.toLowerCase()}`}>{item}</Link>
-              </Button>
-            ))}
+            <Navbar.Collapse id="responsive-navbar-nav" className="navbarmain">
+              <Nav className="ml-auto" defaultActiveKey="#home">
+                {navItems.map(({ path, label, icon }, idx) => (
+                  <Nav.Item key={idx}>
+                    <Nav.Link
+                      as={Link}
+                      to={path}
+                      onClick={() => updateExpanded(false)}
+                    >
+                      {icon} {label}
+                    </Nav.Link>
+                  </Nav.Item>
+                ))}
+                <Nav.Item className="fork-btn">
+                  <Button
+                    href="https://github.com/viswanandMuruganantham"
+                    target="_blank"
+                    className="fork-btn-inner"
+                  >
+                    <CgGitFork style={{ fontSize: "1.2em" }} />{" "}
+                    <AiFillStar style={{ fontSize: "1.1em" }} />
+                  </Button>
+                </Nav.Item>
+              </Nav>
+            </Navbar.Collapse>
           </motion.div>
-        )}
-      </AnimatePresence>
-    </header>
+        </AnimatePresence>
+      </Container>
+    </Navbar>
   );
 }

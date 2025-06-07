@@ -1,103 +1,233 @@
-import { useForm } from "react-hook-form";
-import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Form, FormField, FormItem, FormControl } from "@/components/ui/form";
+import  { useState } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import { motion } from "framer-motion";
+import axios from "axios";
+import { AiFillGithub, AiOutlineSend } from "react-icons/ai";
+import { FiPhone, FiAtSign } from "react-icons/fi";
+import { HiOutlineLocationMarker } from "react-icons/hi";
+import { FaCode, FaLinkedinIn } from "react-icons/fa";
 
-export default function Contact() {
-  const form = useForm({
-    defaultValues: {
-      name: "",
-      email: "",
-      message: "",
-    },
+export default function Contactus() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
   });
 
-  const onSubmit = (data: any) => {
-    console.log("Form Submitted:", data);
+  const handleChange = (e: { target: { name: any; value: any } }) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    if (!(formData.name && formData.email && formData.message)) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "https://formspree.io/f/mldngzja", // ✅ Your actual Formspree endpoint
+        formData,
+        {
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        alert(`Thanks ${formData.name}, your message has been sent!`);
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+      alert("Something went wrong. Try again later.");
+    }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full px-6 py-12 bg-gradient-to-r from-gray-900 to-black text-gray-200 font-sans">
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="text-center w-full max-w-3xl mb-12"
-      >
-        <h2 className="text-5xl font-extrabold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg">
-          Contact Me
-        </h2>
-      </motion.div>
+    <div>
+      <Container fluid className="certificate-section" id="about">
+        <Container>
+          <Row>
+            <Col md={12} className="certificate-description d-flex justify-content-start">
+              <motion.h1
+                className="aboutme-heading"
+                initial={{ opacity: 0, x: -100 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+              >
+                Contact me
+              </motion.h1>
+            </Col>
 
-      <Card className="w-full max-w-lg bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-lg border border-gray-600">
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <Label className="text-white">Name</Label>
-                    <FormControl>
-                      <Input {...field} placeholder="Your Name" className="bg-gray-800 text-white p-3 rounded-md" />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+            <Col md={12} id="contact" className="mt-3">
+              <Row>
+                {/* Contact Form */}
+                <Col md={4}>
+                  <motion.div
+                    className="contacts-form"
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                  >
+                    <form onSubmit={handleSubmit}>
+                      <div className="input-container d-flex flex-column">
+                        <label htmlFor="username" className="label-class">
+                          Full Name
+                        </label>
+                        <input
+                          type="text"
+                          className="form-input input-class"
+                          id="username"
+                          name="name"
+                          placeholder="Enter your name"
+                          value={formData.name}
+                          onChange={handleChange}
+                        />
+                      </div>
 
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <Label className="text-white">Email</Label>
-                    <FormControl>
-                      <Input {...field} type="email" placeholder="Your Email" className="bg-gray-800 text-white p-3 rounded-md" />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+                      <div className="input-container d-flex flex-column">
+                        <label htmlFor="email" className="label-class">
+                          Email address
+                        </label>
+                        <input
+                          type="email"
+                          className="form-input input-class"
+                          id="email"
+                          name="email"
+                          placeholder="Enter email"
+                          value={formData.email}
+                          onChange={handleChange}
+                        />
+                      </div>
 
-              <FormField
-                control={form.control}
-                name="message"
-                render={({ field }) => (
-                  <FormItem>
-                    <Label className="text-white">Message</Label>
-                    <FormControl>
-                      <Textarea {...field} placeholder="Your Message" className="bg-gray-800 text-white p-3 rounded-md" />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+                      <div className="input-container d-flex flex-column">
+                        <label htmlFor="userMessage" className="label-class">
+                          Message
+                        </label>
+                        <textarea
+                          className="form-message input-class"
+                          id="userMessage"
+                          name="message"
+                          rows={3}
+                          placeholder="Enter message"
+                          value={formData.message}
+                          onChange={handleChange}
+                        />
+                      </div>
 
-              <Button 
-                type="submit" 
-                className="w-full bg-blue-500 text-white font-semibold py-3 rounded-lg transition-transform transform hover:scale-105 hover:bg-indigo-600">
-                Send Message
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+                      <div className="submit-btn">
+                        <button type="submit" className="submitBtn">
+                          Submit <AiOutlineSend className="send-icon" />
+                        </button>
+                      </div>
+                    </form>
+                  </motion.div>
+                </Col>
 
-      <div className="flex justify-center space-x-6 mt-8">
-        <a href="https://github.com/viswanandMuruganantham" target="_blank" rel="noopener noreferrer">
-          <FaGithub size={30} className="cursor-pointer text-green-500 hover:text-white transition duration-300" />
-        </a>
-        <a href="https://www.linkedin.com/in/viswanand-muruganantham-28147a253/" target="_blank" rel="noopener noreferrer">
-          <FaLinkedin size={30} className="cursor-pointer text-blue-500 hover:text-blue-700 transition duration-300" />
-        </a>
-        <a href="mailto:viswanand004@outlook.com">
-          <FaEnvelope size={30} className="cursor-pointer text-white hover:text-blue-500 transition duration-300" />
-        </a>
-      </div>
+                {/* Contact Info + Map */}
+                <Col md={7}>
+                  <motion.div
+                    className="contacts-details"
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.7 }}
+                    viewport={{ once: true }}
+                  >
+                    <a
+                      href="mailto:viswanandmuruganantham23@gmail.com"
+                      className="personal-details"
+                    >
+                      <div className="detailsIcon">
+                        <FiAtSign />
+                      </div>
+                      <p style={{ color: "#fbd9ad" }}>
+                        viswanandmuruganantham23@gmail.com
+                      </p>
+                    </a>
+
+                    <a href="tel:+91 7868957285" className="personal-details">
+                      <div className="detailsIcon">
+                        <FiPhone />
+                      </div>
+                      <p style={{ color: "#fbd9ad" }}>+91 7868957285</p>
+                    </a>
+
+                    <a
+                      href="https://maps.app.goo.gl/n929U1pE4FGEKbY67"
+                      className="personal-details"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div className="personal-details">
+                        <div className="detailsIcon">
+                          <HiOutlineLocationMarker />
+                        </div>
+                        <p style={{ color: "#fbd9ad" }}>
+                          2.9/1, Main Road, Puduppathur, Tiruvarur.
+                        </p>
+                      </div>
+                    </a>
+                  </motion.div>
+
+                  <motion.div
+                    className="contact-map"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ duration: 1 }}
+                    viewport={{ once: true }}
+                  >
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15680.656617806948!2d79.6721833!3d10.7218191!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a55416082db6c3d%3A0xd97b1030913c0877!2sPuduppathur%2C%20Tamil%20Nadu%20610106!5e0!3m2!1sen!2sin!4v1747337210761!5m2!1sen!2sin"
+                      frameBorder="0"
+                      allowFullScreen
+                      aria-hidden="false"
+                      title="Contact Me"
+                      tabIndex={0}
+                      loading="lazy"
+                      className="w-100 mt-3"
+                      height="300"
+                    ></iframe>
+                  </motion.div>
+                </Col>
+
+                <div className="flex justify-center lg:justify-start gap-4 mb-2 text-2xl text-white z-20 relative">
+                  <a
+                    href="https://github.com/viswanandMuruganantham"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-purple-400 transition duration-300"
+                  >
+                    <AiFillGithub />
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/viswanand-muruganantham-28147a253/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-blue-400 transition duration-300"
+                  >
+                    <FaLinkedinIn />
+                  </a>
+                  <a
+                    href="https://leetcode.com/u/VISWANAND_M/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-yellow-400 transition duration-300"
+                  >
+                    <FaCode />
+                  </a>
+                </div>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
+      </Container>
     </div>
   );
 }

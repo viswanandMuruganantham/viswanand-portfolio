@@ -4,6 +4,9 @@
 
 /* ... */
 
+.page-content {
+  padding-top: 60px; /* Same as navbar height */
+}
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
